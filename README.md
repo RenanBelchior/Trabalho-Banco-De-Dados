@@ -1,5 +1,5 @@
 # Trabalho-Banco-De-Dados
-CRUD utilizando linguagem de programação Python + o Banco de Dados(MySQL)
+CRUD utilizando linguagem de programação Python + Interface + Banco de Dados(MySQL)
 
 ![image](https://github.com/user-attachments/assets/d9a80289-c046-4969-85ea-c6af0d2e0db1)
 
