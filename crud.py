@@ -67,7 +67,6 @@ def delete_product(product_id):
     cursor.close()
     connection.close()
 
-
 def add_product_window():
     def save_product():
         nome = nome_entry.get()
@@ -79,20 +78,21 @@ def add_product_window():
 
     add_window = tk.Toplevel(root)
     add_window.title("Adicionar Produto")
+    add_window.configure(bg="#d1e7dd")  
 
-    tk.Label(add_window, text="Nome:").grid(row=0, column=0, padx=10, pady=5)
+    tk.Label(add_window, text="Nome:", bg="#d1e7dd").grid(row=0, column=0, padx=10, pady=5)
     nome_entry = tk.Entry(add_window)
     nome_entry.grid(row=0, column=1, padx=10, pady=5)
 
-    tk.Label(add_window, text="Preço:").grid(row=1, column=0, padx=10, pady=5)
+    tk.Label(add_window, text="Preço:", bg="#d1e7dd").grid(row=1, column=0, padx=10, pady=5)
     preco_entry = tk.Entry(add_window)
     preco_entry.grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(add_window, text="Quantidade:").grid(row=2, column=0, padx=10, pady=5)
+    tk.Label(add_window, text="Quantidade:", bg="#d1e7dd").grid(row=2, column=0, padx=10, pady=5)
     quantidade_entry = tk.Entry(add_window)
     quantidade_entry.grid(row=2, column=1, padx=10, pady=5)
 
-    tk.Button(add_window, text="Salvar", command=save_product).grid(row=3, column=0, columnspan=2, pady=10)
+    tk.Button(add_window, text="Salvar", command=save_product, bg="#007bff", fg="white").grid(row=3, column=0, columnspan=2, pady=10)
 
 def edit_product_window():
     try:
@@ -112,23 +112,24 @@ def edit_product_window():
 
     edit_window = tk.Toplevel(root)
     edit_window.title("Editar Produto")
+    edit_window.configure(bg="#f8d7da")  
 
-    tk.Label(edit_window, text="Nome:").grid(row=0, column=0, padx=10, pady=5)
+    tk.Label(edit_window, text="Nome:", bg="#f8d7da").grid(row=0, column=0, padx=10, pady=5)
     nome_entry = tk.Entry(edit_window)
     nome_entry.insert(0, selected_product[1])
     nome_entry.grid(row=0, column=1, padx=10, pady=5)
 
-    tk.Label(edit_window, text="Preço:").grid(row=1, column=0, padx=10, pady=5)
+    tk.Label(edit_window, text="Preço:", bg="#f8d7da").grid(row=1, column=0, padx=10, pady=5)
     preco_entry = tk.Entry(edit_window)
     preco_entry.insert(0, selected_product[2])
     preco_entry.grid(row=1, column=1, padx=10, pady=5)
 
-    tk.Label(edit_window, text="Quantidade:").grid(row=2, column=0, padx=10, pady=5)
+    tk.Label(edit_window, text="Quantidade:", bg="#f8d7da").grid(row=2, column=0, padx=10, pady=5)
     quantidade_entry = tk.Entry(edit_window)
     quantidade_entry.insert(0, selected_product[3])
     quantidade_entry.grid(row=2, column=1, padx=10, pady=5)
 
-    tk.Button(edit_window, text="Salvar", command=save_edited_product).grid(row=3, column=0, columnspan=2, pady=10)
+    tk.Button(edit_window, text="Salvar", command=save_edited_product, bg="#198754", fg="white").grid(row=3, column=0, columnspan=2, pady=10)
 
 def delete_selected_product():
     try:
@@ -139,9 +140,21 @@ def delete_selected_product():
     except IndexError:
         messagebox.showwarning("Atenção", "Selecione um produto para deletar.")
 
+def create_menu():
+    menubar = tk.Menu(root)
+    file_menu = tk.Menu(menubar, tearoff=0)
+    file_menu.add_command(label="Adicionar Produto", command=add_product_window)
+    file_menu.add_command(label="Editar Produto", command=edit_product_window)
+    file_menu.add_command(label="Deletar Produto", command=delete_selected_product)
+    file_menu.add_separator()
+    file_menu.add_command(label="Sair", command=root.quit)
+    menubar.add_cascade(label="Opções", menu=file_menu)
+
+    root.config(menu=menubar)
 
 root = tk.Tk()
 root.title("Sistema de Estoque")
+root.configure(bg="#f0f0f0") 
 
 
 root.columnconfigure(0, weight=1)
@@ -151,7 +164,6 @@ root.columnconfigure(3, weight=1)
 root.rowconfigure(0, weight=1)
 root.rowconfigure(1, weight=0)
 
-
 columns = ("ID", "Nome", "Preço", "Quantidade")
 product_tree = ttk.Treeview(root, columns=columns, show="headings")
 for col in columns:
@@ -159,18 +171,16 @@ for col in columns:
 
 product_tree.grid(row=0, column=0, columnspan=4, sticky="nsew", padx=10, pady=10)
 
-
 scroll_y = tk.Scrollbar(root, orient="vertical", command=product_tree.yview)
 scroll_y.grid(row=0, column=4, sticky="ns")
 product_tree.configure(yscrollcommand=scroll_y.set)
 
+tk.Button(root, text="Adicionar Produto", command=add_product_window, bg="#007bff", fg="white").grid(row=1, column=0, padx=10, pady=5, sticky="ew")
+tk.Button(root, text="Editar Produto", command=edit_product_window, bg="#ffc107", fg="black").grid(row=1, column=1, padx=10, pady=5, sticky="ew")
+tk.Button(root, text="Deletar Produto", command=delete_selected_product, bg="#dc3545", fg="white").grid(row=1, column=2, padx=10, pady=5, sticky="ew")
+tk.Button(root, text="Atualizar Lista", command=lambda: read_products(product_tree), bg="#198754", fg="white").grid(row=1, column=3, padx=10, pady=5, sticky="ew")
 
-tk.Button(root, text="Adicionar Produto", command=add_product_window).grid(row=1, column=0, padx=10, pady=5, sticky="ew")
-tk.Button(root, text="Editar Produto", command=edit_product_window).grid(row=1, column=1, padx=10, pady=5, sticky="ew")
-tk.Button(root, text="Deletar Produto", command=delete_selected_product).grid(row=1, column=2, padx=10, pady=5, sticky="ew")
-tk.Button(root, text="Atualizar Lista", command=lambda: read_products(product_tree)).grid(row=1, column=3, padx=10, pady=5, sticky="ew")
-
-
+create_menu()
 create_table()
 read_products(product_tree)
 root.mainloop()
